@@ -11,7 +11,7 @@
 #include <iostream>
 
 template<class LowerLayer>
-struct ApplicationOuter //: LowerLayer::template LayerImpl<Application<LowerLayer>>
+struct ApplicationOuter
 {
 	ApplicationOuter(){
 		std::cout << "ApplicationOuter::ApplicationOuter()" << std::endl;
@@ -19,10 +19,9 @@ struct ApplicationOuter //: LowerLayer::template LayerImpl<Application<LowerLaye
 
 	struct Application :
 			LowerLayer::template LayerImpl<Application>
-			//, LowerLayer
 	{
 		typedef Application this_type;
-		typedef typename LowerLayer::template LayerImpl<this_type> Lower;
+		typedef typename LowerLayer::template LayerImpl<this_type> Lower; //base_type
 
 		Application(){
 			std::cout << "Application::Application()" << std::endl;
@@ -47,16 +46,13 @@ struct ApplicationOuter //: LowerLayer::template LayerImpl<Application<LowerLaye
 
 template<class LowerLayer>
 struct Layer4{
-	typedef Layer4<LowerLayer> outer_type;
 
 	template<class Upper>
 	struct LayerImpl :
 			LowerLayer::template LayerImpl< LayerImpl<Upper> >
-			//, Upper
 	{
-//		typedef outer_type::LayerImpl<Upper> this_type;
 		typedef LayerImpl<Upper> this_type;
-		typedef typename LowerLayer::template LayerImpl<this_type> Lower;
+		typedef typename LowerLayer::template LayerImpl<this_type> Lower; //base_type
 
 		LayerImpl(){
 			std::cout << "Layer4::LayerImpl::LayerImpl()" << std::endl;
@@ -78,31 +74,31 @@ struct Layer4{
 			Upper::staticCallBack();
 		}
 		Upper* This(){ return static_cast<Upper*>(this);}
-		//virtual
+
 		void callBack(){
 			std::cout << "Layer4Impl::callBack()" << std::endl;
-			This()->Upper::callBack();
+			This()->callBack();
 		}
 	};
 };
 template<class LowerLayer>
 struct Layer3{
-	typedef Layer3<LowerLayer> outer_type;
 
 	template<class Upper>
 	struct LayerImpl :
 			LowerLayer::template LayerImpl< LayerImpl<Upper> >
-			//, Upper
 	{
 		typedef LayerImpl<Upper> this_type;
-//		typedef outer_type::LayerImpl<Upper> this_type;
 		typedef typename LowerLayer::template LayerImpl<this_type> Lower;
+
 		LayerImpl(){
 			std::cout << "Layer3::LayerImpl::LayerImpl()" << std::endl;
 		}
 		~LayerImpl(){
 			std::cout << "Layer3::LayerImpl::~LayerImpl()" << std::endl;
 		}
+		Upper* This(){ return static_cast<Upper*>(this);}
+
 		static void staticService(){
 			std::cout << "Layer3Impl::staticService()" << std::endl;
 			Lower::staticService();
@@ -115,23 +111,20 @@ struct Layer3{
 			std::cout << "Layer3Impl::staticCallBack()" << std::endl;
 			Upper::staticCallBack();
 		}
-		Upper* This(){ return static_cast<Upper*>(this);}
 		void callBack(){
 			std::cout << "Layer3Impl::callBack()" << std::endl;
-			This()->Upper::callBack();
+			This()->callBack();
 		}
 	};
 };
 template<class LowerLayer>
 struct Layer2{
-	typedef Layer2<LowerLayer> outer_type;
 
 	template<class Upper>
 	struct LayerImpl :
 			LowerLayer::template LayerImpl< LayerImpl<Upper> >
-			//, Upper
 	{
-		typedef outer_type::LayerImpl<Upper> this_type;
+		typedef LayerImpl<Upper> this_type;
 		typedef typename LowerLayer::template LayerImpl<this_type> Lower;
 
 		LayerImpl(){
@@ -140,6 +133,7 @@ struct Layer2{
 		~LayerImpl(){
 			std::cout << "Layer2::LayerImpl::~LayerImpl()" << std::endl;
 		}
+
 		Upper* This(){ return static_cast<Upper*>(this);}
 
 		static void staticService(){
@@ -148,7 +142,7 @@ struct Layer2{
 		}
 		void service(){
 			std::cout << "Layer2Impl::service()" << std::endl;
-			this->Lower::service();
+			this->Lower::service(); // delegates to base class
 		}
 		static void staticCallBack(){
 			std::cout << "Layer2Impl::staticCallBack()" << std::endl;
@@ -156,7 +150,7 @@ struct Layer2{
 		}
 		void callBack(){
 			std::cout << "Layer2Impl::callBack()" << std::endl;
-			This()->Upper::callBack();
+			This()->Upper::callBack(); // delegates to derived class
 		}
 	};
 };
@@ -174,13 +168,14 @@ struct Layer1{
 			std::cout << "Layer1::LayerImpl::~LayerImpl()" << std::endl;
 		}
 
+		Upper* This(){ return static_cast<Upper*>(this);}
+
 		static void staticService(){
 			std::cout << "Layer1Impl::staticService()" << std::endl;
 		}
 		void service(){
 			std::cout << "Layer1Impl::service()" << std::endl;
 		}
-		Upper* This(){ return static_cast<Upper*>(this);}
 		void externalEvent(){
 			std::cout << "Layer1Impl::externalEvent()" << std::endl;
 			Upper::staticCallBack();

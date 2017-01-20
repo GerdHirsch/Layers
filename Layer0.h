@@ -15,11 +15,20 @@ struct Layer0{
 	template<class TopLayer>
 	struct LayerImpl
 	{
+		using this_type = LayerImpl<TopLayer>;
+
 		static std::string toString(){ return "Layer0::LayerImpl<TopLayer>"; }
 
 		virtual ~LayerImpl(){}
 
-		TopLayer* This(){ return static_cast<TopLayer*>(this);}
+		TopLayer* This(){
+			static_assert(
+					std::is_base_of
+					<	this_type,
+						TopLayer
+					>::value, "TopLayer must be derived from Layer0::LayerImpl<TopLayer>"
+						);
+			return static_cast<TopLayer*>(this);}
 	};
 };
 

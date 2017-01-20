@@ -7,34 +7,36 @@
 
 
 #include "layers.h"
+#include "CreateLayers.h"
 
 #include <iostream>
 using namespace std;
 
+
+
 int main(){
-	cout << "Layers" << endl;
+	cout << "=== begin Layers" << endl;
 
-
-	typedef Layer1 L1;
+	using L0 = Layer0;
 	//...
-	typedef Layer2<L1> L2;
-	typedef Layer3<L2> L3;
-	typedef Layer4<L3> L4;
+	using L1 = Layer1<L0> ;
+	using L2 = Layer2<L1> ;
+	using L3 = Layer3<L2> ;
+	using L4 = Layer2<L3> ;
 
-//	typedef ApplicationOuter<L1>::Application App;
-	typedef ApplicationOuter<L4>::Application App;
+//	using Application = TopLayer<L4>;
+//	using Application = TopLayer<Layer4<Layer3<Layer2<Layer1>>>>;
+
+//	using Application = createLayers<Layer0, Layer1, Layer2, Layer3, Layer4, TopLayer>;
+	using Application = createLayers<Layer0, Layer1, TopLayer>;
 
 	cout << endl << "App app;" << endl;
-	App app;
+	Application app;
+
 	cout << endl << "event from top down" << endl;
 	app.useLayerStack();
 
-	// Only needed to simulate an external event
-//	typedef App::Lower L_4;
-//	typedef L_4::Lower L_3;
-//	typedef L_3::Lower L_2;
-//	typedef L_2::Lower L_1;
-
 	cout << endl << "event from bottom up" << endl;
 	app.externalEvent();
+	cout << "=== end Layers" << endl;
 }

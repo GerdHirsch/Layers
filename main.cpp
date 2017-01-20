@@ -7,11 +7,12 @@
 
 
 #include "layers.h"
+#include "layer0.h"
 #include "CreateLayers.h"
 
 #include <iostream>
 using namespace std;
-
+using namespace GenericTools;
 
 
 int main(){

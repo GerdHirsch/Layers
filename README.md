@@ -1,5 +1,6 @@
 # Layers
-Example for implementing multi layers with C++ CRTP
+Example for implementing multi layers with C++ CRTP.
+
 This project is intended to be used as an area to experiment with the C++ template based (CRTP) implementation of 
 multi layers.
 

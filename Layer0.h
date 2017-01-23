@@ -22,11 +22,8 @@ struct Layer0{
 		virtual ~LayerImpl(){}
 
 		TopLayer* This(){
-			static_assert(
-					std::is_base_of
-					<	this_type,
-						TopLayer
-					>::value, "TopLayer must be derived from Layer0::LayerImpl<TopLayer>"
+			static_assert(std::is_base_of< this_type, TopLayer>::value,
+						"TopLayer must be derived from Layer0::LayerImpl<TopLayer>"
 						);
 			return static_cast<TopLayer*>(this);}
 	};

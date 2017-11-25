@@ -6,6 +6,8 @@
  */
 
 
+#include "upsidedown/UpSideDown.h"
+
 #include "layers.h"
 #include "layer0.h"
 #include <iostream>
@@ -14,25 +16,50 @@
 using namespace std;
 using namespace GenericTools;
 
+void demoUpSideDown();
+void demoLayers();
 
 int main(){
-	cout << "=== begin Layers" << endl;
+	cout << "=== Layers" << endl;
+	demoLayers();
+//	demoUpSideDown();
+	cout << "=== end Layers" << endl;
+}
+void demoUpSideDown(){
+	using namespace UpSideDown;
 
-	using L0 = Layer0;
+	using Application1 = TopLayerDown<Layer2Down<Layer2Up<TopLayerUp>>>;
+
+	using L0 = TopLayerUp;
+	using L1 = Layer2Up<L0>;
+	using L2 = Layer2Down<L1>;
+//	using Application2 = TopLayerDown<L2>;
+//	using App = TopLayerDown<TopLayerUp>;
+
+	cout << "=== App app;" << endl;
+	using App = Application1;
+	App app;
+	cout << "=== useLayerStack();" << endl;
+	app.useLayerStack();
+	cout  << endl << " === end demoUpSideDown"<< endl;
+}
+
+void demoLayers(){
+//	using L0 = Layer0;
 	//...
-	using L1 = Layer1<L0> ;
-	using L2 = Layer2<L1> ;
-	using L3 = Layer3<L2> ;
-	using L4 = Layer4<L3> ;
-
-//	using templatePack = TemplatePack<Layer1, Layer2>;
-
-	// Alternative definitions
+//	using L1 = Layer1<L0> ;
+//	using L2 = Layer2<L1> ;
+//	using L3 = Layer3<L2> ;
+//	using L4 = Layer4<L3> ;
 //	using Application = TopLayer<L4>;
-//	using Application = TopLayer<Layer4<Layer3<Layer2<Layer1<Layer0>>>>>;
-//	using Application = createLayers<Layer0, Layer1, Layer2, Layer3, Layer4, TopLayer>;
 
-	using Application = assembleLayers<Layer0, Layer1, TopLayer>;
+//	using templatePack = TemplatePack<Layer1, Layer2, TopLayer>;
+//	using App = assembleLayersImpl<Layer0, templatePack>;
+	// Alternative definitions
+//	using Application = TopLayer<Layer4<Layer3<Layer2<Layer1<Layer0>>>>>;
+	using Application = assembleLayers<Layer0, Layer1, Layer2, Layer3, Layer4, TopLayer>;
+
+//	using Application = assembleLayers<Layer0, Layer1, TopLayer>;
 
 	cout << endl << "App app;" << endl;
 	Application app;

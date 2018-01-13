@@ -83,7 +83,9 @@ struct Layer4{
 		static void staticCallBack4(){
 			std::cout << "Layer4Impl::staticCallBack4()" << std::endl;
 		}
-		Upper* This(){ return static_cast<Upper*>(this);}
+//		Upper* This(){ return static_cast<Upper*>(this);}
+//		Upper* This(){ return base_type::This();}
+		using base_type::This;
 
 		void callBack(){
 			std::cout << "Layer4Impl::callBack()" << std::endl;
@@ -222,15 +224,15 @@ struct Layer1{
 		void externalEvent(){
 			std::cout << "--- Layer1Impl::externalEvent() static" << std::endl;
 			TopLayer::staticCallBack();
-//			TopLayer::staticCallBack2();
-//			TopLayer::staticCallBack3();
-//			TopLayer::staticCallBack4();
+			TopLayer::staticCallBack2();
+			TopLayer::staticCallBack3();
+			TopLayer::staticCallBack4();
 			TopLayer::staticCallBack5();
 			std::cout << "--- Layer1Impl::externalEvent() non static " << std::endl;
 			This()->callBack(); // pure abstract
-//			This()->callBack2(); // pure abstract
-//			This()->callBack3(); // pure abstract
-//			This()->callBack4(); // pure abstract
+			This()->callBack2(); // pure abstract
+			This()->callBack3(); // pure abstract
+			This()->callBack4(); // pure abstract
 			This()->callBack5(); // pure abstract
 		}
 	};

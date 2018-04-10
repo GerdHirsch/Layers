@@ -13,6 +13,7 @@
 #include <iostream>
 
 #include "GenericTools/AssembleLayers.h"
+
 using namespace std;
 using namespace GenericTools;
 
@@ -26,6 +27,8 @@ int main(){
 	cout << "=== end Layers" << endl;
 }
 void demoUpSideDown(){
+	cout << "=== " << __PRETTY_FUNCTION__ << endl;
+
 	using namespace UpSideDown;
 
 	using Application1 = TopLayerDown<Layer2Down<Layer2Up<TopLayerUp>>>;
@@ -45,7 +48,8 @@ void demoUpSideDown(){
 }
 
 void demoLayers(){
-	cout << "demoLayers" << endl;
+	cout << "=== " << __PRETTY_FUNCTION__ << endl;
+
 	cout << "L0, L1, ... Application0 app0.useLayerStack()" << endl;
 	using L0 = Layer0;
 	//...

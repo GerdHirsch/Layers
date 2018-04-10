@@ -20,7 +20,8 @@ struct TopLayer : LowerLayer::template LayerImpl<TopLayer<LowerLayer>>{
 
 	TopLayer(){
 		std::cout << "TopLayer::TopLayer()" << std::endl
-		<< " this_type: " << TopLayer::toString()
+		<< " this_type: " << this_type::toString()
+//		<< " this_type: " << TopLayer::toString() // in this context TopLayer is equivalent to TopLayer<LowerLayer>
 		<< " base_type: " << base_type::toString()
 		<< std::endl;
 	}
